@@ -54,3 +54,4 @@
    - `NEXT_PUBLIC_API_URL`: URL Backend trên Railway/Render (ví dụ: `https://api.nostalgic-game.up.railway.app`)
    - `NEXT_PUBLIC_SOCKET_URL`: URL Backend tương tự cho kết nối WebSocket.
 4. Bấm **Deploy**.
+

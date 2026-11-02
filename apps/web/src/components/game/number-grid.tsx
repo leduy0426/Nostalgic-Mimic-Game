@@ -75,3 +75,4 @@ export const NumberGrid: React.FC<NumberGridProps> = ({
     </div>
   );
 };
+

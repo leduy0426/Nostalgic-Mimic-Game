@@ -16,3 +16,4 @@ export function generateNumberHuntBoard(): number[] {
 
   return board;
 }
+

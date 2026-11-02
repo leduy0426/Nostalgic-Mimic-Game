@@ -141,3 +141,4 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
     </div>
   );
 };
+

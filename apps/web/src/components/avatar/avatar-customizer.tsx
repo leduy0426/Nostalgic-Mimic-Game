@@ -175,3 +175,4 @@ export const AvatarCustomizer: React.FC = () => {
     </div>
   );
 };
+

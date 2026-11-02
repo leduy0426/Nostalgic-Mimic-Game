@@ -138,3 +138,4 @@ export const AvatarDisplay: React.FC<AvatarDisplayProps> = ({
     </div>
   );
 };
+

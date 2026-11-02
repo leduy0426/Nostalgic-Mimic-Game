@@ -55,3 +55,4 @@ Khảo sát ngắn gồm 5 câu theo thang điểm Likert 5 mức độ (1 = R�
 - Tổng hợp dữ liệu log từ cơ sở dữ liệu `GameSession`, `GameResult`, và `XPTransaction`.
 - Thống kê tỷ lệ hoàn thành, thời gian trung bình và điểm khảo sát trung bình (Mean Likert Score).
 - Đưa kết quả vào Báo cáo cuối kỳ môn học làm bằng chứng nghiệm thu Spec-Driven & Agent-Driven Development.
+

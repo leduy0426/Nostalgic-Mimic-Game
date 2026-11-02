@@ -275,3 +275,4 @@ bootstrap().catch((err) => {
   console.error('Fatal Server Bootstrap Error:', err);
   process.exit(1);
 });
+

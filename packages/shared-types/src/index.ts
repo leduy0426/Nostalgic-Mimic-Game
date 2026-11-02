@@ -230,3 +230,4 @@ export interface ServerToClientEvents {
   'player:disconnected': (payload: { playerId: string; gracePeriodSeconds: number }) => void;
   'player:reconnected': (payload: { playerId: string }) => void;
 }
+
