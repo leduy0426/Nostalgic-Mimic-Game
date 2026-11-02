@@ -1,0 +1,345 @@
+﻿PROJECT IDEATION
+Nostalgic Mini Game Platform
+A Quick-Play Web Platform for Nostalgic Mini Games, Avatar Progression, and Shareable Achievements
+Document Version: 1.0Date: October 26, 2026Project Type: Web Application / Casual Gaming PlatformDevelopment Team: 4 Software Engineering Students – FPT UniversityEstimated Development Duration: 4–8 WeeksDocument Status: Revised Draft for Team Review
+
+1. Project Overview
+1.1. Project Description
+Nostalgic Mini Game Platform is a browser-based quick-play mini game platform that introduces familiar childhood and schoolyard games in an accessible online environment. Its initial audience is students and young adults who recognize games such as Number Hunt and Caro and want light entertainment, either alone or with friends.
+The product deliberately separates why players discover it from why they may return. Nostalgic game themes are the proposed user acquisition hook: recognizable games make the platform immediately approachable. Fast-to-start, relatively short and replayable gameplay is the primary engagement experience: players can complete a challenge, see a clear result, and choose to try again with minimal friction. A shared Avatar Progression and Achievement system provides an additional long-term reason to return and a way to express personal progress beyond a single game.
+Players will be able to earn experience points (XP), gain levels, and, as extended functionality, collect virtual coins and purchase cosmetic items. The platform also plans to support sharing an achievement card featuring the player's avatar, nickname, and personal record to social networks; this is intended to support social recognition and potentially invite new players. The actual effect on acquisition and retention remains a hypothesis to be tested, not a guaranteed result.
+The product's three connected value layers are:
+Nostalgia — Attract: Recognizable childhood games encourage first-time discovery.
+Quick-Play &amp; Replayability — Engage: Straightforward rules, minimal start-up steps, immediate results and convenient replays make each game session enjoyable on its own terms.
+Avatar Progression &amp; Social Recognition — Return and Share: XP, levels, cosmetics, personal records and shareable achievements give a persistent sense of progress and identity across different games.
+The platform is not a virtual pet simulator; avatar progression complements the core mini-game experience instead of replacing it. It also does not aim to force continuous play: replay is a voluntary choice.
+1.2. Project Vision
+To create a nostalgic quick-play mini game platform that attracts players through familiar childhood games, engages them through easy-to-start, short-session, highly replayable gameplay with immediate feedback, and offers long-term progression through customizable avatars and shareable achievements.
+The intended experience is: discover through nostalgia → enjoy and replay because the games are fun and convenient → return to develop an avatar, improve personal records, and share achievements. This is the team's proposed product strategy, subject to validation with users.
+1.3. Project Objectives
+The project aims to:
+Develop a unified browser-based platform containing nostalgic and casual mini games, accessible without installing an application.
+Make it easy to begin a session, understand the rules, receive immediate gameplay feedback and replay quickly; session length can vary by game and no universal time limit will be imposed.
+Support Solo and PvP modes where suitable, including inviting a friend to an online match.
+Maintain personal records, results and a consistent player identity across the available games.
+Provide a lightweight Avatar Progression System with XP and levels; cosmetics and coins are desirable extensions.
+Explore social recognition through player profiles and shareable achievement cards featuring an avatar and personal best.
+Deploy an early version, observe real gameplay and test the assumptions about nostalgia, replayability and voluntary return visits.
+Apply Spec-Driven Development (SDD) and Agent-Driven Development (ADD), with human review and testing, throughout the project.
+
+2. Problem Statement
+2.1. Background
+Online versions of traditional games, as well as websites offering collections of casual mini games, already exist. The project does not claim to invent the games, create the first such website, or uniquely offer avatars and leaderboards. Instead, it proposes a focused combination and presentation: nostalgic discovery, quick-play sessions, replayable skill challenges, and cross-game avatar/achievement progression.
+Familiar games such as Number Hunt and Caro can serve as an accessible entry point for students and young adults. For some users, relatively short leisure breaks create a preference for games that start quickly and have an understandable outcome. The team wishes to explore whether this approach, together with a persistent player identity and shareable records, can offer an appealing alternative within an already competitive casual gaming market.
+The team is inspired by the accessibility of short-form digital experiences, but does not assume that short games cause a particular dopamine response or that engagement must mean addiction. The desired outcome is enjoyable, voluntary repeat play, not compulsive use.
+2.2. Identified Problems
+The project addresses the following unverified user needs/opportunities:
+Opportunity 1 — Fast access to recognizable entertainment. Some users may prefer to open a web page and begin playing a familiar game with little setup.
+Opportunity 2 — Replayable short-session fun. Users may enjoy simple challenges with immediate results, easy rematches, and opportunities to improve personal records. Game duration must suit each game's mechanics rather than a fixed, universal 1–3 or 3–5 minute rule.
+Opportunity 3 — Social gameplay. Friends may wish to compete remotely in nostalgic games through shareable game rooms.
+Opportunity 4 — Identity, progress and social recognition. A shared avatar, persistent achievement history and shareable records may make individual game results feel meaningful across sessions and visible to friends.
+Market position. Existing alternatives may already offer some or all of these features; the project's proposed differentiation is their coherent combination for a nostalgic, quick-play-focused audience, not an assertion of exclusivity.
+2.3. Problem Statement Summary
+How might we attract players through recognizable nostalgic games, deliver enjoyable and convenient quick-play sessions that people choose to replay, and extend that experience through a customizable avatar, persistent personal records and achievements that users can share with friends?
+Validation note: The proposed needs, differentiation and retention benefits are hypotheses. The team must evaluate them through user interviews, playtests and behavioral metrics; they should not be presented as proven market facts.
+
+3. Target Users and Stakeholders
+3.1. Primary Target Users
+The primary target audience consists of students and young adults who enjoy accessible casual games.
+Potential characteristics include:
+Familiarity with traditional or casual mini games.
+Interest in short entertainment sessions.
+Desire to compete with friends.
+Preference for games that require little preparation.
+Interest in improving personal records and collecting achievements.
+3.2. Secondary Target Users
+The secondary audience includes individuals who enjoy revisiting childhood games or participating in simple online games with friends.
+These users may be particularly interested in the nostalgic elements of the platform.
+3.3. Stakeholders
+Stakeholder
+Role
+Interest
+Players
+Primary users
+Entertainment, competition, progression
+Development Team
+System developers
+Technical learning, implementation, deployment
+Project Instructor
+Academic supervisor
+Project quality, requirements, learning outcomes
+Test Participants
+Early users
+Usability, gameplay experience, feedback
+
+4. Proposed Solution
+4.1. Solution Overview
+The proposed solution is a responsive website where visitors can discover familiar mini games and reach the gameplay screen with minimal friction. Each game follows its own rules and pace, but emphasizes understandable controls, responsive feedback, a clear end-of-session result and an easy option to play again.
+Where appropriate, players can enter a shared room and challenge a friend. Registered users will have persistent accounts, records and a shared avatar that accumulates progression across different games. Following a game, the result screen can highlight completion time or match outcome, personal best and XP/level progress.
+As an extension, users can create a shareable achievement card combining their avatar, nickname, game name and achievement, suitable for saving or posting to social media. Direct platform-specific integrations are not necessary for the first release.
+The initial value proposition remains gameplay first: Avatar, sharing and cosmetics support the experience but do not substitute for enjoyable games.
+4.2. Core Product Features
+Mini Game Hub
+A centralized interface where users can browse and access available games.
+Single-player Gameplay
+Selected mini games allow users to play independently, improve performance, and achieve personal records.
+Multiplayer Gameplay
+Selected games support competitive play between users through online game rooms.
+User Account System
+Players can register, log in, and maintain their personal progress.
+Avatar Progression System
+Players earn XP, increase their levels, and personalize their avatars.
+Virtual Currency System
+Players can earn virtual coins through gameplay and use them to purchase cosmetic items.
+Player Statistics
+The platform stores gameplay results, achievements, and personal records.
+Leaderboard System
+Where implemented, leaderboards allow players to compare their performance with others.
+Achievement Showcase &amp; Social Sharing (Extended MVP)
+A player can display personal records beside a customized avatar and generate an achievement card for saving or sharing externally. This feature is planned, not yet part of the minimum required release.
+
+5. Mini Game Selection
+5.1. Candidate Mini Games
+Six mini games have been identified as potential components of the platform.
+Mini Game
+Description
+Proposed Game Modes
+Number Hunt
+Find numbers in ascending order
+Solo / PvP
+Caro
+Traditional grid-based strategy game
+PvP / Optional PvE
+Memory Matching
+Find matching pairs of hidden cards
+Solo / Optional PvP
+Dots and Boxes
+Connect dots to complete squares
+PvP / Optional PvE
+Stack Tower
+Stack moving blocks to build a tower
+Solo
+Sudoku
+Complete number puzzles
+Solo
+The project will prioritize a smaller selection during its initial development phase.
+5.2. Primary Mini Game: Number Hunt
+Number Hunt is selected as the primary mini game because it reflects a familiar paper-based competitive experience and supports both individual challenges and real-time competition.
+Single-player Mode
+A board containing numbers from 1 to 25 is randomly generated.
+The player must select the numbers in ascending order as quickly as possible.
+The system records the completion time, allowing the player to improve their personal record.
+Multiplayer Mode
+Two players participate in the same game room and share an identical number board.
+Both players compete to select the next valid number before their opponent.
+Each successfully claimed number awards one point to the player who claimed it first.
+Once all 25 numbers have been claimed, the player with the higher score wins.
+This gameplay introduces technical challenges involving real-time communication, synchronized game states, concurrent actions, and score validation.
+5.3. Additional Priority Games
+Caro
+A traditional strategy game played on a grid, where two players attempt to create a winning sequence of marks.
+The initial implementation will prioritize multiplayer gameplay. Computer-controlled opponents may be introduced later.
+Memory Matching
+A memory-based game in which players reveal hidden cards and attempt to identify matching pairs.
+The game can measure performance using completion time and the number of attempts.
+The initial implementation will prioritize single-player gameplay.
+
+6. Gameplay Design Principles
+6.1. Nostalgic Entry Point
+Use familiar rules and recognizable visual cues to make games easy to discover and understand. Nostalgia is the acquisition hypothesis, not the sole reason to keep playing.
+6.2. Quick Start &amp; Short-Session Gameplay
+Players should be able to enter a game with minimal steps. Games should generally fit casual breaks, but each title sets its own pace and natural end condition. Caro may take longer than Number Hunt; no fixed time limit applies to all titles.
+6.3. Immediate Feedback &amp; Clear Results
+Gameplay interactions should provide timely feedback. After a completed session, the player sees the appropriate outcome (score, win/loss, completion time or personal best), plus any earned XP and avatar progress available in that release. Rewards must be calculated according to explicit rules in the Specification.
+6.4. Low-Friction, Voluntary Replay
+A result screen should offer a clearly visible Play Again option. Replayability should rely on satisfying gameplay, skill improvement, rematches and personal records, rather than forced participation or loss-based pressure.
+6.5. Cross-Game Identity &amp; Social Recognition
+The same player profile and avatar connect progress across games. An extended feature will let users create a visual card highlighting the avatar and a verified personal achievement for external sharing. Sharing is optional and must not expose private account data.
+6.6. Player Autonomy
+The platform should not penalize inactivity, impose forced streaks or use misleading rewards. The team will evaluate enjoyment and voluntary return behavior without designing for compulsive use.
+
+7. Avatar Progression System
+7.1. Purpose
+The Avatar Progression System is a secondary long-term engagement layer rather than the main product. It gives players a persistent identity and a visible record of achievement across mini games.
+A player may be motivated to return to improve a record, increase their level, unlock a cosmetic item or share a meaningful result with friends. These are hypotheses about engagement, not guaranteed behavioral effects.
+7.2. Avatar Design
+To reduce development complexity, all players will initially use the same basic avatar model.
+Users may personalize their avatars through cosmetic modifications.
+Possible customization options include:
+Avatar colors.
+Hats.
+Glasses.
+Simple accessories.
+7.3. Experience Points
+Players receive XP through eligible gameplay activities.
+XP contributes to the player's overall level.
+The exact reward amounts and leveling formula will be defined during Requirements &amp; Specification.
+7.4. Virtual Currency
+Players may earn Coins through gameplay.
+Coins can be spent on cosmetic customization items.
+The virtual currency will not represent real money.
+7.5. Achievement Showcase and Social Sharing
+The product intends to support a player-facing showcase for verified achievements. An Achievement Card may include the player's public nickname, avatar appearance, mini game title, record or match result, and the date of the achievement. Exporting or saving the card for sharing is the first planned approach; direct publishing via social network APIs is a possible future enhancement.
+This feature is included in the Extended MVP, not the mandatory Core MVP, to preserve the 4–8 week schedule. Player consent and data minimization will be considered when specifying public fields.
+7.6. Scope Limitations
+The initial version will not include complex virtual pet mechanics such as hunger, hygiene, sleep management, or multi-stage evolution. It will not include real-money virtual currency or features designed to punish players for inactivity.
+
+8. Minimum Viable Product (MVP)
+8.1. MVP Goal
+The Core MVP will test the game's quick-play value using a complete Number Hunt experience and persistent basic avatar/achievement progression. The extended target is to demonstrate that nostalgic discovery, satisfying replayability and visible progress can coexist in one product.
+Scope principle: The team's aspirational three-game lineup is Number Hunt, Caro and Memory Matching, but the smallest deliverable is a polished, deployed Number Hunt with Solo/PvP and a basic avatar.
+8.2. Core MVP
+The minimum target includes:
+Responsive Mini Game Hub.
+Basic user authentication.
+Number Hunt single-player.
+Number Hunt multiplayer.
+Personal records and match results.
+A clear post-game result screen and quick Play Again action.
+Basic Avatar System.
+XP and Level progression.
+Persistent user data.
+Deployment for real-user testing.
+8.3. Extended MVP
+If development time allows, additional features may include:
+Caro multiplayer.
+Memory Matching single-player.
+Basic virtual coins and cosmetic items.
+Leaderboards.
+Achievement card featuring avatar, public nickname and verified personal record, with save/export for external sharing.
+8.4. Future Enhancements
+Potential future features include:
+Dots and Boxes.
+Stack Tower.
+Sudoku.
+Random matchmaking.
+Friends system.
+Additional cosmetic customization.
+Advanced player statistics.
+Direct integrations for posting achievements to social media platforms.
+Scope note: Number Hunt, Caro, and Memory Matching remain the three priority mini games for the intended first release. However, only Number Hunt is mandatory in the smallest Core MVP. This distinction protects the project against schedule constraints.
+
+9. Development Constraints
+9.1. Time Constraints
+The estimated development period is between four and eight weeks.
+The team must prioritize essential functionality and avoid unnecessary feature expansion.
+9.2. Team Constraints
+The project will be developed by four third-year Software Engineering students.
+Team members have different technical specializations, including .NET and Node.js.
+A consistent technology stack and shared development conventions will be established before implementation.
+9.3. Technology Constraints
+The project requires technologies capable of supporting:
+Web-based user interfaces.
+Persistent data storage.
+Real-time multiplayer communication.
+User authentication.
+Deployment and basic monitoring.
+Specific frameworks and database technologies have not yet been selected.
+9.4. Resource Constraints
+The project should prioritize affordable or free development tools and hosting services where practical.
+9.5. Development Methodology
+The team intends to apply a Hybrid SDD &amp; ADD approach.
+SDD will guide requirements definition, architecture, business rules, and acceptance criteria.
+ADD will assist with implementation, test generation, and iterative development.
+Human developers will remain responsible for reviewing, validating, and integrating generated code.
+
+10. Assumptions and Risks
+10.1. Project Assumptions
+The team will test the following assumptions:
+Recognizable childhood games attract first-time users (acquisition hypothesis).
+Quick start, clear results and easy rematches make mini games enjoyable enough to replay voluntarily (core engagement hypothesis).
+Personal records and skill improvement help sustain interest across repeated sessions.
+XP, avatar customization and a common profile across games provide an additional reason to return (long-term retention hypothesis).
+An achievement card that combines avatar and verified results may motivate some players to share their accomplishments and bring in friends (social sharing hypothesis).
+A limited set of polished games can provide value even when broad competitors already exist.
+None of these assumptions is treated as validated before user testing.
+10.2. Potential Risks
+Risk
+Potential Impact
+Proposed Mitigation
+Limited development time
+Incomplete features
+Prioritize Core MVP
+Multiplayer synchronization errors
+Incorrect game results
+Server-side validation and testing
+Insufficient user interest
+Low adoption
+Early user testing
+Excessive feature scope
+Delayed delivery
+Separate Core and Extended MVP
+Inconsistent AI-generated code
+Integration difficulties
+Shared specifications and code review
+Reward manipulation
+Unfair progression
+Server-side reward verification
+Weak differentiation
+Low adoption or replay
+Interview users and benchmark existing alternatives
+Privacy in social sharing
+Unintended disclosure
+Share only opt-in public profile and verified result fields
+
+11. Success Criteria
+The project will be evaluated using both technical and user-oriented criteria.
+11.1. Technical Success
+The platform should:
+Successfully deploy a functional web application.
+Allow users to access and play the implemented mini games.
+Support a complete Number Hunt multiplayer match.
+Preserve user records and avatar progression.
+Correctly validate game outcomes and rewards.
+Handle common multiplayer disconnections and invalid actions.
+11.2. User Experience Success
+Players should be able to start a game with few steps, understand controls, finish a session with a clear outcome, and choose to replay. In playtesting, the team will investigate whether nostalgia helped users discover the platform, whether gameplay itself makes them want another round, and whether records/avatar progression make return visits more appealing.
+Social recognition will be assessed, when the Extended MVP exists, through optional achievement-card exports or sharing intent; absence of this feature in the Core MVP must not block first-release success.
+11.3. Proposed Validation Metrics
+Metric
+Initial Validation Target
+Test Users
+50–100 users
+Core Gameplay
+At least one fully playable mini game
+Multiplayer
+Successful two-player Number Hunt matches
+Data Persistence
+Reliable storage of records and progress
+Quick-Play Experience
+Measure time/steps to start, match duration and result-screen clarity
+Replayability
+Track completed games per session and optional Play Again usage
+Retention
+Measure seven-day return rate (if test window permits)
+Acquisition Hypothesis
+Ask new users whether nostalgia motivated their visit
+Social Sharing (Extended MVP)
+Track optional achievement-card generation/export, if implemented
+User Feedback
+Collect usability and enjoyment feedback
+These targets are provisional and should be adjusted according to project duration and available resources.
+
+12. Open Questions
+The following decisions will be addressed during Requirements &amp; Specification:
+Which frontend, backend, and database technologies will the team adopt?
+Will guest users be allowed to play without registration, and what progress can they retain?
+What XP and Coins reward formulas will be applied?
+How will invalid or disconnected multiplayer sessions be handled?
+What are the exact win conditions and game rules for Caro?
+Which extended features can realistically be completed within the final schedule?
+What hosting and deployment solution will be used?
+Which achievement fields can be shared publicly, and how will player consent work?
+What will count as a quick start or acceptable replay friction in usability tests?
+Which competing casual game sites should the team compare during user research?
+These questions should be resolved before implementing the affected features.
+
+13. Conclusion
+Nostalgic Mini Game Platform is positioned as a quick-play casual game platform with a nostalgic discovery hook, rather than simply another collection of old games or an avatar simulator.
+Its proposed player journey is Attract → Engage → Return &amp; Share:
+Attract through Nostalgia: Familiar childhood games make the product recognizable and approachable.
+Engage through Quick, Replayable Gameplay: Responsive, low-friction sessions with immediate results make gameplay the principal source of enjoyment.
+Return &amp; Share through Avatar and Achievement Progression: Persistent levels, personal records, cosmetics and optional achievement cards give players ways to express progress and share it with friends.
+The development team will prioritize a complete Number Hunt Solo/PvP experience, player records and basic avatar progression, then expand to Caro, Memory Matching and achievement-card sharing as capacity allows. Any claim about retention or acquisition will be tested with real users rather than assumed.
+The team will use this ideation document as the basis for the upcoming Requirements &amp; Specification work, especially the Context &amp; Goal, gameplay rules, functional requirements, user data and acceptance criteria.
+

@@ -1,0 +1,474 @@
+﻿REQUIREMENTS &amp; SPECIFICATION
+Nostalgic Mini Game Platform
+System-Level Executable Specification — Draft v1.0
+Date: October 26, 2026Status: Draft for Team Review — NOT APPROVED for implementationSource of truth for product scope: Project Ideation, Document Version 1.0, Revised Draft for Team Review (the second Markdown file supplied by the team).Team: Four third-year Software Engineering students, FPT UniversityDelivery horizon: Approximately 4–8 weeksMethod: Hybrid Spec-Driven Development (SDD) &amp; Agent-Driven Development (ADD)
+Document convention. [CONFIRMED] = stated in the team's latest Project Ideation; [PROPOSED] = a concrete specification suggestion that still requires team approval; [TBD] = an unresolved decision. Do not treat [PROPOSED] or [TBD] as approved implementation instructions. EARS-style SHALL requirements under a [PROPOSED] heading are draft requirements, not final commitments. Scope tags: CORE, EXTENDED, FUTURE.
+Scope and Traceability
+Scope
+Included
+Notes
+CORE MVP
+Responsive game hub; authentication; Number Hunt Solo and 2-player PvP; result screen and Play Again; saved records/results; basic avatar and XP/level; persistence; deployment and real-user testing
+[CONFIRMED] from Ideation §8.2
+EXTENDED MVP
+Caro PvP; Memory Matching Solo; coins/cosmetics; leaderboards; achievement card with avatar + public nickname + verified record for save/export
+[CONFIRMED] as optional scope, not guaranteed deliverables
+FUTURE
+Dots and Boxes; Stack Tower; Sudoku; random matchmaking; friend system; direct social API integrations; richer cosmetics and analytics
+[CONFIRMED] out of initial scope
+The team's aspirational initial collection has three games (Number Hunt, Caro, Memory Matching), but the minimum release need only include a complete Number Hunt with Solo/PvP. Individual games have their own pacing; there is no global 1–3-minute or 3–5-minute limit.
+
+1. Context &amp; Goal
+1.1 Business Problem
+Existing casual-game websites and digital versions of nostalgic games already serve players. This project does not claim to invent Number Hunt or Caro or to be the first platform with avatars and leaderboards. Instead, it explores whether a focused experience combining recognizable childhood games, minimal friction to begin playing, short and satisfying sessions, immediate results, easy replay, and shared avatar/achievement progression can appeal to students and young adults. Remote play with a friend adds a social dimension. The relative importance of these needs and the appeal of the combination are hypotheses requiring user testing. [CONFIRMED — Ideation §§1–2]
+1.2 Product Goal
+The system will provide a responsive browser-based game hub, prioritizing an operational Number Hunt game in both Solo and PvP modes. A registered player can save personal results and advance one basic avatar with XP and levels. The gameplay itself remains the primary entertainment value; avatar progression adds long-term identity rather than a separate pet-care simulator. [CONFIRMED — Ideation §§1, 4, 7–8]
+The product strategy is Attract → Engage → Return &amp; Share: nostalgia is a possible discovery hook; quick, replayable gameplay is the core experience; records/avatar progression and optional public achievement cards create ways to return and share. This is an intended strategy, not a validated behavioral outcome. [CONFIRMED — Ideation §13]
+1.3 Success Criteria and Evidence
+For the minimum release, confirm that a real user can reach the Number Hunt game, complete a Solo run, finish a synchronized 2-player PvP match, view the outcome, and start another game. A registered user's authorized record, match result, XP/level and basic avatar data must persist. The project will aim to recruit 50–100 test users as a provisional goal, not an observed result or mandatory grading threshold. [CONFIRMED — Ideation §§8, 11]
+Measurements to collect where feasible: steps/time to first game; complete games per session; Play Again usage; clarity of outcome; seven-day return rate if the observation period permits; player interview feedback on nostalgia; optional achievement-card exports if the extended feature is built. [CONFIRMED as proposed measures — Ideation §11]
+1.4 Technical Context and Constraints
+Four students have 4–8 weeks and experience spanning .NET and Node.js. Frontend, backend, database, hosting, and authentication implementation are TBD; no framework is mandated here. Real-time communication is necessary for PvP, but this document does not assume a particular protocol until architecture selection. The team applies SDD to constraints, behavioral rules and acceptance tests, and ADD to assisted implementation with human review. [CONFIRMED — Ideation §9]
+
+2. Actors &amp; Roles
+Actor
+Description
+Allowed behavior
+Status
+Visitor
+Person who opens the website without being authenticated
+Browse game hub and public product information
+[PROPOSED]; low-risk minimum
+Guest Player
+Unauthenticated gameplay participant
+Whether Solo/PvP is allowed; whether temporary records survive navigation
+[TBD] — Ideation §12 explicitly leaves guest policy open
+Registered Player
+Authenticated owner of a player account
+Play supported modes, view own records and results, earn XP, access own avatar and profile
+[CONFIRMED]
+PvP Participant
+A player inside a particular 2-player match
+See match state and submit legal game actions; cannot submit on behalf of opponent
+[PROPOSED] specific match authorization
+System / Game Server
+Trusted authoritative component
+Validate moves, resolve concurrent claims, calculate scores and persist outcomes
+[PROPOSED] technical responsibility consistent with reliable PvP
+Administrator
+Operational user with elevated permissions
+Administration UI, moderation and account tools not defined in Ideation
+[TBD]; do not invent a full Admin module
+Authorization principle [PROPOSED]: A client must not be able to edit another player's profile, award its own XP, alter authoritative match scores or submit moves for another session. Guest policy must be decided before finalizing corresponding FRs.
+
+3. Functional Requirements (EARS-style)
+Reading guide: WHEN ... THE system SHALL ... defines observable event-driven behavior. Every requirement has an ID, scope and source/decision state.
+3.1 Discovery &amp; Game Hub
+FR-HUB-01 [CORE, CONFIRMED]: THE system SHALL provide a responsive game hub listing mini games that have been implemented and made available.
+FR-HUB-02 [CORE, PROPOSED]: WHEN a visitor selects an available game, THE system SHALL display that game's supported modes and a clear action to start.
+FR-HUB-03 [CORE, PROPOSED]: WHEN a game is not included in the deployed build, THE system SHALL NOT present it as playable; it MAY label it as coming soon.
+3.2 Accounts &amp; Player Identity
+FR-AUTH-01 [CORE, CONFIRMED]: THE system SHALL support a basic user authentication capability so registered players can retain persistent progress.
+FR-AUTH-02 [CORE, PROPOSED]: WHEN a player authenticates successfully, THE system SHALL associate subsequent saved records, match results and XP with that player's account.
+FR-AUTH-03 [CORE, PROPOSED]: WHEN an unauthenticated person requests private account data, THE system SHALL deny the request without disclosing the data.
+FR-AUTH-04 [CORE, TBD]: Guest gameplay eligibility, guest-to-account migration, credential mechanism, password recovery and account deletion workflows require decisions before implementation.
+3.3 Number Hunt — Shared Rules
+FR-NH-01 [CORE, CONFIRMED]: WHEN a new Number Hunt board is created, THE system SHALL generate a random arrangement containing each integer from 1 through 25 exactly once.
+FR-NH-02 [CORE, CONFIRMED]: WHILE a Number Hunt game is active, THE system SHALL recognize numbers in ascending order, starting from 1 and progressing through 25.
+FR-NH-03 [CORE, PROPOSED]: WHEN an input does not match the current required number, THE system SHALL not advance the target or award a point.
+FR-NH-04 [CORE, PROPOSED]: WHEN a board has finished, THE system SHALL reject subsequent gameplay inputs as state-changing actions.
+3.3.1 Solo
+FR-NHS-01 [CORE, CONFIRMED]: WHEN a player starts Number Hunt Solo, THE system SHALL display a newly arranged 1–25 board and start tracking the completion time.
+FR-NHS-02 [CORE, CONFIRMED]: WHEN the player selects the next required number, THE system SHALL advance the required number until 25 has been selected.
+FR-NHS-03 [CORE, CONFIRMED]: WHEN 25 is selected validly, THE system SHALL end the run, show the elapsed time and compare it with the authenticated player's stored personal best.
+FR-NHS-04 [CORE, PROPOSED]: WHEN an authenticated player finishes a faster valid Solo run than their stored personal best, THE system SHALL update that record exactly once.
+FR-NHS-05 [CORE, TBD]: Whether a Solo timer can be paused, how background tab time is handled, and how unverified/offline scores are treated are unresolved.
+3.3.2 PvP (simultaneous, not turn-based)
+FR-NHP-01 [CORE, CONFIRMED]: THE system SHALL support a Number Hunt PvP room for two players who see the same board arrangement.
+FR-NHP-02 [CORE, CONFIRMED]: WHILE a PvP match is active, both players SHALL be allowed to attempt the current required number simultaneously; there are no alternating turns.
+FR-NHP-03 [CORE, CONFIRMED]: WHEN a player is first to successfully claim the current valid number under the system's authoritative ordering rule, THE system SHALL award that player one point and advance the target to the next number. The same player MAY claim consecutive numbers.
+FR-NHP-04 [CORE, PROPOSED]: WHEN competing submissions target the same number, THE system SHALL resolve them atomically so that at most one point is awarded for that number; it SHALL publish the accepted target and scores to both clients.
+FR-NHP-05 [CORE, CONFIRMED]: WHEN all numbers 1–25 have been claimed, THE system SHALL end the match and identify the winner as the player with the higher total score.
+FR-NHP-06 [CORE, PROPOSED]: WHEN the final scores are equal, THE system SHALL declare a draw rather than fabricate an additional scoring rule. Needs approval: a 25-point match cannot end tied if exactly one point is awarded per number, so this clause is a defensive fallback, not an expected normal outcome.
+FR-NHP-07 [CORE, PROPOSED]: WHEN a player receives an authoritative state update, THE client SHALL display the accepted next target and current scores without relying on its own speculative award.
+FR-NHP-08 [CORE, TBD]: Room creation and invitation method (link/code), room readiness/start, disconnect grace period, reconnect rights, abandonment and forfeit rules require approval.
+FR-NHP-09 [CORE, TBD]: Define exactly how simultaneous attempts are ordered (e.g., atomic arrival order at the server), including disclosure of the latency trade-off, before approval. A player's local click timestamp must not be treated as trustworthy proof of being first.
+3.4 Post-game, Replay and Records
+FR-RES-01 [CORE, CONFIRMED]: WHEN a supported game finishes, THE system SHALL display an outcome appropriate to that mode (Solo elapsed time/personal best or PvP scores/winner).
+FR-RES-02 [CORE, CONFIRMED]: WHEN a game has finished, THE result screen SHALL provide an obvious Play Again option that starts a new valid session or rematch flow.
+FR-RES-03 [CORE, CONFIRMED]: WHEN an authenticated player finishes a valid game, THE system SHALL maintain applicable results and records persistently.
+FR-RES-04 [CORE, PROPOSED]: WHEN the player refreshes the result view, THE system SHALL not award XP again for the same completed match/run.
+FR-RES-05 [CORE, TBD]: PvP rematch requires opponent acceptance or a new room? Define before implementation.
+3.5 Avatar &amp; XP
+FR-AV-01 [CORE, CONFIRMED]: THE system SHALL provide registered players with one basic persistent avatar and a recorded XP/level progression state.
+FR-AV-02 [CORE, CONFIRMED]: WHEN an eligible completed game result is accepted, THE system SHALL apply an XP reward according to a documented, approved reward table.
+FR-AV-03 [CORE, PROPOSED]: THE system SHALL compute the player's level from a consistently applied progression rule and display the current XP/level to that player.
+FR-AV-04 [CORE, PROPOSED]: THE system SHALL store and apply each eligible gameplay reward at most once per verified completion identifier.
+FR-AV-05 [CORE, TBD]: XP per activity, leveling thresholds, abuse limits, and whether losses/draws award XP are not yet agreed. Do not generate fixed numerical values without approval.
+3.6 Extended Features (only if team chooses to implement)
+FR-CARO-01 [EXTENDED, CONFIRMED at concept level]: THE system SHALL support two-player Caro with turn-based placement and determination of the match result. [TBD]: board dimensions, exact line/win rules, overlines, blocked-ends, draws, timer and rematch policy.
+FR-MEM-01 [EXTENDED, CONFIRMED at concept level]: THE system SHALL support Solo Memory Matching with paired hidden cards, revealing cards and reporting completion time and attempts. [TBD]: board size, mismatch delay, invalid actions and scoring conventions.
+FR-COIN-01 [EXTENDED, CONFIRMED at concept level]: Eligible play MAY award non-monetary Coins redeemable for basic cosmetic customization. [TBD]: amounts, purchase rules and item catalog.
+FR-LB-01 [EXTENDED, CONFIRMED at concept level]: The platform MAY provide comparative leaderboards for relevant verified records. [TBD]: privacy and tie-breaking.
+FR-SHARE-01 [EXTENDED, CONFIRMED at concept level]: WHEN a player chooses to generate an achievement card, THE system SHALL prepare a card with approved public nickname, avatar, game and verified record, suitable for saving/export. Publishing through social-network APIs is FUTURE.
+FR-SHARE-02 [EXTENDED, PROPOSED]: THE system SHALL avoid including email, account identifier, private gameplay metadata or other non-public personal details in exported cards.
+
+4. Non-functional Requirements
+No fixed response-time, uptime, concurrency or accessibility thresholds were approved in Ideation. The numbers below, where provided, are proposed test targets requiring agreement after representative testing.
+ID
+Quality attribute
+Draft verifiable requirement
+State
+NFR-UX-01
+Low friction
+Key actions to launch an available Solo game and to replay after a result SHALL be understandable and usable on modern desktop/mobile browsers. Test by observing users; record steps and elapsed time.
+[CORE, PROPOSED] — define numeric targets later
+NFR-UX-02
+Immediate feedback
+Gameplay actions, completion outcome and progress shall be visibly acknowledged; UI must not silently ignore success/failure.
+[CORE, PROPOSED]
+NFR-UX-03
+Session length
+The system SHALL NOT impose one universal time limit across all mini games.
+[CORE, CONFIRMED]
+NFR-RT-01
+Multiplayer consistency
+After a valid server-approved number claim, both active PvP clients SHALL converge to the same target, scores and match status.
+[CORE, PROPOSED]
+NFR-RT-02
+Concurrency
+At most one accepted claim for a given required number, including under concurrent requests and retries.
+[CORE, PROPOSED]
+NFR-SEC-01
+Authorization
+Only an authorized player/system component SHALL be able to access or modify private profile, reward and match data.
+[CORE, PROPOSED]
+NFR-SEC-02
+Validation
+Untrusted client values SHALL not directly set XP, scores, verified record times or ownership.
+[CORE, PROPOSED]
+NFR-REL-01
+Persistence
+Confirmed stored records and applied rewards SHALL remain consistent after browser reload; duplicate completion messages SHALL not duplicate rewards.
+[CORE, PROPOSED]
+NFR-PRIV-01
+Social sharing
+Any future exported card SHALL contain only fields approved for public sharing and must require an explicit user action.
+[EXTENDED, PROPOSED]
+NFR-COMP-01
+Compatibility
+The deployed game SHALL support a documented set of modern browsers and mobile/desktop layouts; exact support matrix TBD.
+[CORE, PROPOSED]
+NFR-OBS-01
+Validation evidence
+The team SHOULD collect test-session evidence for start friction, completed games, replays and user-reported enjoyment; consent and data minimization decisions TBD.
+[CORE, PROPOSED]
+Performance test plan [TBD]: Define representative device/network conditions, expected concurrent matches, p95 perceived response limits, hosting capacity and test method. Do not invent “&lt;200 ms” or 99.9% availability without measurements.
+
+5. Data Model (logical / conceptual)
+The following is a candidate conceptual model. It is not an approved database schema and does not imply a particular relational engine, ORM or service architecture.
+Entity
+Candidate attributes
+Relationship / notes
+Status
+PlayerAccount
+player_id, public_nickname, auth_reference, created_at
+One account owns personal records and one avatar. Credential representation TBD.
+[CORE, PROPOSED]
+AvatarProgress
+player_id, avatar_variant, xp_total, level, updated_at
+Exactly one current avatar per registered player in Core MVP.
+[CORE, PROPOSED]
+GameSession
+session_id, game_type, mode, board_seed_or_layout, status, started_at, ended_at
+A Solo run or PvP match; actual board layout and audit storage need decisions.
+[CORE, PROPOSED]
+SessionParticipant
+session_id, player_id_or_guest_ref, score, result
+One participant for Solo; two for Number Hunt PvP.
+[CORE, PROPOSED]
+GameResult
+result_id, session_id, player_id, completion_time_ms, outcome, verified_at
+Only server-verified results qualify for persistent rewards/records.
+[CORE, PROPOSED]
+PersonalBest
+player_id, game_type, mode, best_value, result_id
+Keep best verified Solo time (lower is better for Number Hunt).
+[CORE, PROPOSED]
+XPTransaction
+transaction_id, player_id, result_id, xp_delta, applied_at
+Uniqueness on eligible completion prevents duplicate awards.
+[CORE, PROPOSED]
+GameRoom
+room_id, game_type, status, created_at, join_reference
+PvP invite mechanism, expiry, security and waiting state TBD.
+[CORE, PROPOSED]
+CosmeticItem / Inventory
+Item ID, category, coin price; player ownership
+Applicable only if coin/cosmetic extension approved.
+[EXTENDED]
+AchievementCard
+Public nickname, avatar appearance, source verified result
+Could be generated on demand rather than persisted.
+[EXTENDED]
+Data invariants [PROPOSED]: A PvP Number Hunt session has at most two active participants; its current next number progresses monotonically 1→26; each claimed integer awards one point exactly once; the score sum equals the number of accepted claims; a completion/reward identifier is idempotent; personal-best data references a verified result.
+Data decisions [TBD]: Account deletion/retention, privacy settings, nickname uniqueness, guest persistence, session archival, room expiry and data access policies.
+
+6. Error Handling &amp; Exceptional Flows
+ID
+Scenario
+Proposed expected behavior
+Approval
+ERR-01
+Player clicks wrong number
+Show subtle invalid-action feedback; do not advance required number, change score or award XP.
+[PROPOSED]
+ERR-02
+Two players submit same target simultaneously
+Exactly one server-accepted claim; rejected caller gets authoritative updated target/score; no duplicate reward.
+[PROPOSED]
+ERR-03
+Duplicated/delayed number-click request
+Ignore or reject stale request idempotently; never award the same number twice.
+[PROPOSED]
+ERR-04
+Player disconnects during match
+Clearly indicate connection state and preserve authoritative match state; whether to pause, wait, allow reconnect or forfeit is TBD.
+[TBD]
+ERR-05
+Opponent leaves a room before start
+Present a waiting/room-closed state and a safe way back to the hub; exact timeout TBD.
+[TBD]
+ERR-06
+Client requests match not joined / unauthorized profile
+Reject action and prevent disclosure or mutation of another user's data.
+[PROPOSED]
+ERR-07
+Database write fails after valid completion
+Do not display unverified persistent reward as successfully saved; allow safe retry without duplicate awarding. Transaction design TBD.
+[PROPOSED]
+ERR-08
+Browser refresh during Solo or PvP
+Solo continuation/restart and PvP reconnection semantics TBD; no fabricated or duplicated result.
+[TBD]
+ERR-09
+Replay requested after a Solo result
+Generate a fresh valid session/board, not a second completion event on prior session.
+[PROPOSED]
+ERR-10
+Achievement export includes a private field
+Do not export; only approved public fields may be included.
+[EXTENDED, PROPOSED]
+
+7. Acceptance Criteria (Given / When / Then)
+The following scenarios form the starting validation baseline. Criteria involving proposed decisions are draft acceptance tests, not proof those decisions were approved.
+AC-HUB-01 — Find and launch Number Hunt [CORE]
+Given the deployed game hub is open, when a user selects Number Hunt and an available mode, then the appropriate playable screen opens without requiring application installation.
+AC-NHS-01 — Correct Solo board [CORE]
+Given a new Solo run, when the board appears, then it contains each integer 1 through 25 exactly once and the initial required value is 1.
+AC-NHS-02 — Reject incorrect Solo input [CORE, PROPOSED]
+Given a Solo run whose required number is 4, when the player selects 6, then the required number remains 4 and no score or completion state changes.
+AC-NHS-03 — Finish Solo and record personal best [CORE]
+Given an authenticated player has completed numbers 1–24, when the player selects 25, then the run ends, a completion time appears, and a faster verified result becomes the stored personal best. Refreshing does not duplicate the completion reward.
+AC-NHP-01 — Identical boards [CORE]
+Given two players join the same Number Hunt PvP match, when the match begins, then both see the same numbers in the same positions and a common initial target of 1.
+AC-NHP-02 — Competing actions [CORE, PROPOSED]
+Given the shared next target is 7 and the score sum equals 6, when both players submit valid claims for 7 concurrently, then the authoritative match accepts exactly one claim, the new score sum is 7, and both clients show target 8 and identical scores.
+AC-NHP-03 — Non-turn-based competition [CORE]
+Given a player's claim for 10 was accepted, when that player successfully claims 11 before the other player, then the same player receives points for both; no turn alternation is required.
+AC-NHP-04 — End of PvP match [CORE]
+Given numbers 1–24 were claimed, when number 25 is accepted, then the match ends, final total awarded points equal 25, both clients see the same winner and scores, and further clicks cannot change the outcome.
+AC-RES-01 — Quick replay [CORE]
+Given a completed Solo game, when the player selects Play Again, then a new game begins and the previous game's saved result remains unchanged.
+AC-AV-01 — Avatar persists [CORE]
+Given an authenticated player has verified saved XP/level, when the player logs out and logs in again, then the player's avatar and recorded progression remain associated with the same account.
+AC-AV-02 — Reward idempotence [CORE, PROPOSED]
+Given a verified completion has already applied its XP transaction, when its completion message is delivered again, then the player's XP balance does not increase a second time.
+AC-SHARE-01 — Public achievement only [EXTENDED]
+Given a user explicitly requests an achievement card for a verified record, when the card is generated, then it includes only the approved public nickname, avatar, game and achievement fields, and excludes private credentials/contact information.
+AC-UX-01 — Observe quick-play usability [CORE]
+Given a user-testing session, when a participant finds a game, completes one round and optionally selects Play Again, then the team records steps/time to first play, task success, result comprehension and observed voluntary replay. Numeric pass thresholds are TBD.
+Additional test suites required before approval: Security/authorization, account lifecycle, losing connectivity, multi-device concurrent sessions, session expiration, load and browser compatibility, as applicable to the approved scope.
+
+8. Out of Scope
+The following are excluded from the Core MVP:
+Caro PvP, Memory Matching Solo, Coins/cosmetics, public leaderboard and downloadable/shareable achievement cards — EXTENDED if capacity allows.
+Dots and Boxes, Stack Tower, Sudoku, AI opponents, random matchmaking, a social friends network, direct social-network API posting, advanced analytics and an extensive cosmetic library — FUTURE.
+Full virtual-pet simulation (feeding, hunger, sleep, bathing, multi-stage evolution); real-money currency/transactions; punitive daily streaks or inactivity penalties — not intended for the initial product direction.
+A universal mandatory play-time limit applied to every game — explicitly excluded.
+
+9. Open Decisions / Approval Register
+These must not be silently resolved by AI agents. Product owner/team approval is required before implementing dependent behavior.
+ID
+Priority
+Question
+Affected sections
+DEC-01
+High
+Can Guests play Solo, PvP, or neither? Can they keep or convert progress?
+Actors, Auth, Records
+DEC-02
+High
+How do players create/join PvP rooms and confirm ready/start?
+PvP, Room, Errors
+DEC-03
+High
+Server ordering rule for simultaneous PvP claims; expected latency/fairness policy?
+PvP, NFR, AC
+DEC-04
+High
+Disconnect/rejoin, timeout, early departure, forfeit and restart rules?
+PvP, Error Handling
+DEC-05
+High
+Which XP-earning events, amounts, level thresholds and abuse protections?
+Avatar, Data, AC
+DEC-06
+High
+Authentication method and minimum account lifecycle; password/reset or external identity?
+Account, Security
+DEC-07
+Medium
+Solo timer semantics; refresh/tab background, retries and record verification?
+Solo, Records
+DEC-08
+Medium
+Browser/device support and realistic testable performance/concurrency targets?
+NFR
+DEC-09
+Medium
+Deployment stack; hosting, database, protocol and observability?
+Technical Context
+DEC-10
+Medium
+Minimum acceptable 'quick start' (steps/time); usability-test success target?
+UX, AC
+DEC-11
+Conditional
+Exact Caro rules and Memory Matching difficulty parameters if Extended MVP is approved?
+Extended Specs
+DEC-12
+Conditional
+Public achievement fields, consent model and card export format if sharing is approved?
+Extended Sharing
+Prioritized specification follow-up
+The team should approve DEC-01 through DEC-07 first, then create detailed feature-level specs for Authentication, Number Hunt Solo, Number Hunt PvP, Result &amp; Replay, and Avatar/XP. Each detailed feature spec should repeat the eight-part structure where needed, include state transitions and tests, and inherit this system-level document. Do not hand this draft directly to an autonomous coding agent as though all decisions were final.
+10. Context Diagram
+
+
+External Entity
+Entity Type
+Description
+Key Roles &amp; Responsibilities
+Security Boundary &amp; Constraints
+Associated Requirements
+Visitor / Guest
+Human / External Actor
+
+An unauthenticated individual accessing the platform via web or mobile browser without logging in.
+
+• Browse the public Game Hub.
+
+
+• View available games, modes, and &quot;Coming Soon&quot; teasers.
+
+
+• Initiate user registration or account login flows.
+
+• Read-only access to public endpoints.
+
+
+• Strictly restricted from accessing private profiles, persistent XP tracking, or stored match records.
+
+FR-HUB-01, FR-HUB-02, FR-HUB-03, FR-AUTH-03, FR-AUTH-04
+
+Registered Player
+Human / Authenticated User
+
+A verified user holding an active account on the platform with persistent progress data.
+
+• Launch and play supported game modes (Number Hunt Solo &amp; PvP).
+
+
+• Submit in-game inputs (numbers 1–25 sequentially).
+
+
+• Accumulate XP, level up, and maintain an avatar profile.
+
+
+• View personal best records and match summaries.
+
+
+• Trigger &quot;Play Again&quot; flows.
+
+• Operates via authenticated sessions (token-based).
+
+
+• Cannot alter authoritative scores, modify profiles of others, or self-assign rewards.
+
+FR-AUTH-01, FR-AUTH-02, FR-NH-01–04, FR-NHS-01–04, FR-AV-01–04, FR-RES-01–04
+
+PvP Opponent (Peer Player)
+Human / Authenticated Concurrent Actor
+
+An authorized registered player paired in the same 2-player room to compete simultaneously.
+
+• Join a shared room via code or invite link.
+
+
+• Compete on an identical 1–25 board simultaneously without turns.
+
+
+• Submit real-time number claims concurrently.
+
+
+• Receive authoritative WebSocket state updates and match outcomes.
+
+• Bound to their own connection session.
+
+
+• Cannot submit moves or claim rewards on behalf of the opponent.
+
+
+• No direct P2P authority; all game state resolution is mediated by the server.
+
+FR-NHP-01–07, NFR-RT-01, NFR-RT-02, NFR-SEC-01
+
+Database / State Persistence Layer
+External Subsystem / Data Store
+
+Persistent data storage engine maintaining system entities, transactional logs, and player state.
+
+• Maintain records for PlayerAccount, AvatarProgress, GameSession, GameResult, and PersonalBest.
+
+
+• Perform idempotent writes on XPTransaction (via unique result_id).
+
+
+• Upsert personal best records upon faster verified completions.
+
+
+• Serve user progression queries upon authentication.
+
+• Located strictly behind the system boundary.
+
+
+• Accessible only by server-side services via secure database drivers/ORMs.
+
+
+• Untrusted clients have zero direct access.
+
+FR-AUTH-02, FR-NHS-04, FR-RES-03, FR-AV-04, NFR-SEC-01, NFR-REL-01, Section 5 Data Model
+
+11. BPMN
+11.1.Chơi đơn Number Hunt Solo &amp; Cập nhật Kỷ lục 
+
+11.2. Đối kháng Number Hunt PvP &amp; Phân xử tranh chấp đồng thời 
+
+11.3.Chơi lại (Play Again) &amp; Bảo vệ Idempotency khi Refresh (F5) 
+
+Source and methodology note
+Product-derived content: Project Ideation — Nostalgic Mini Game Platform, Document Version 1.0 — Revised Draft for Team Review, supplied by the team, especially §§1–2, 4–8, 11–12.
+Specification structure: LinhNDM, Spec-Driven &amp; Agent-Driven Development, Chapter 5, §5.2 — eight-part Executable Specification structure; EARS requirement style in §5.3. This document is an application of that guidance, not a claim that the instructor issued this exact submission template.
+Draft additions explicitly marked: Suggested authorization, atomic scoring, data entities, resilience responses and Given/When/Then tests are engineering proposals that need human acceptance. No numerical XP reward, stack choice or disconnect forfeit policy has been fabricated as a team decision.
+

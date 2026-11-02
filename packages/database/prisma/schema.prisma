@@ -1,0 +1,170 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  PLAYER
+  ADMIN
+}
+
+enum GameType {
+  NUMBER_HUNT
+  CARO
+  MEMORY
+}
+
+enum GameMode {
+  SOLO
+  PVP
+}
+
+enum MatchOutcome {
+  WIN
+  LOSS
+  DRAW
+}
+
+enum SessionStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  nickname     String        @unique
+  passwordHash String
+  role         Role          @default(PLAYER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  avatar          Avatar?
+  sessionMembers  SessionParticipant[]
+  results         GameResult[]
+  personalBests   PersonalBest[]
+  xpTransactions  XPTransaction[]
+  inventory       UserInventory[]
+
+  @@index([email])
+  @@index([nickname])
+}
+
+model Avatar {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  color      String   @default("retro-yellow")
+  hat        String   @default("none")
+  glasses    String   @default("none")
+  accessory  String   @default("none")
+  xpTotal    Int      @default(0)
+  level      Int      @default(1)
+  coins      Int      @default(0)
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model GameSession {
+  id           String             @id @default(uuid())
+  gameType     GameType           @default(NUMBER_HUNT)
+  mode         GameMode           @default(SOLO)
+  boardSeed    String?
+  status       SessionStatus      @default(ACTIVE)
+  startedAt    DateTime           @default(now())
+  endedAt      DateTime?
+
+  participants SessionParticipant[]
+  results      GameResult[]
+
+  @@index([status])
+  @@index([gameType, mode])
+}
+
+model SessionParticipant {
+  id        String        @id @default(uuid())
+  sessionId String
+  session   GameSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  guestName String?
+  score     Int           @default(0)
+  outcome   MatchOutcome?
+  createdAt DateTime      @default(now())
+
+  @@index([sessionId])
+  @@index([userId])
+}
+
+model GameResult {
+  id               String       @id @default(uuid())
+  sessionId        String
+  session          GameSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  userId           String?
+  user             User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  completionTimeMs Int?
+  outcome          MatchOutcome
+  verifiedAt       DateTime     @default(now())
+
+  xpTransaction    XPTransaction?
+  personalBest     PersonalBest?
+
+  @@index([sessionId])
+  @@index([userId])
+}
+
+model PersonalBest {
+  id          String     @id @default(uuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameType    GameType   @default(NUMBER_HUNT)
+  mode        GameMode   @default(SOLO)
+  bestValueMs Int
+  resultId    String     @unique
+  result      GameResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  updatedAt   DateTime   @updatedAt
+
+  @@unique([userId, gameType, mode])
+  @@index([userId, gameType, mode])
+}
+
+model XPTransaction {
+  id        String     @id @default(uuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resultId  String     @unique // IDEMPOTENCY KEY: guarantees exactly one XP award per match/run
+  result    GameResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  xpDelta   Int
+  reason    String
+  createdAt DateTime   @default(now())
+
+  @@index([userId])
+  @@index([resultId])
+}
+
+model CosmeticItem {
+  id        String          @id @default(uuid())
+  category  String          // 'hat', 'glasses', 'accessory'
+  name      String
+  coinPrice Int             @default(50)
+  assetKey  String
+  owners    UserInventory[]
+}
+
+model UserInventory {
+  id         String       @id @default(uuid())
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itemId     String
+  item       CosmeticItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  acquiredAt DateTime     @default(now())
+
+  @@unique([userId, itemId])
+  @@index([userId])
+}

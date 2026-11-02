@@ -1,0 +1,15 @@
+{
+  "name": "nostalgic-mini-game-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nostalgic Mini Game Platform - A Quick-Play Web Platform for Nostalgic Mini Games, Avatar Progression, and Shareable Achievements",
+  "scripts": {
+    "dev": "pnpm --parallel --filter ./apps/* dev",
+    "build": "pnpm --filter @repo/shared-types build && pnpm --filter ./apps/* build",
+    "lint": "pnpm --recursive lint",
+    "test": "pnpm --recursive test"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
